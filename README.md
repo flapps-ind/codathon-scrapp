@@ -1,30 +1,88 @@
-# Scrapp marketplace frontend
+# Scrapp ♻️  
+*A Hyper-Local Exchange for Reusable Items*
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Scrapp is a sustainability-focused web platform that enables people to give away reusable items instead of discarding them. It creates a fast, hyper-local exchange system that helps reduce waste and build community-driven reuse.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/flapps-inds-projects/v0-scrapp-marketplace-frontend)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/lMR0HPg4MCL)
+---
 
-## Overview
+## 🚀 Problem Statement
+Usable items are discarded every day due to lack of awareness, inconvenience, and the absence of a simple hyper-local reuse platform. Existing solutions are either logistics-heavy or not designed for quick neighborhood exchanges.
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+---
 
-## Deployment
+## 💡 Solution
+Scrapp provides a lightweight, location-based platform where users can post unwanted items and allow nearby users to claim them for easy pickup — reducing waste with minimal friction.
 
-Your project is live at:
+---
 
-**[https://vercel.com/flapps-inds-projects/v0-scrapp-marketplace-frontend](https://vercel.com/flapps-inds-projects/v0-scrapp-marketplace-frontend)**
+## ✨ Key Features
+- 📍 Hyper-local item discovery
+- 📸 Item listing with images
+- 🤝 Claim & pickup workflow
+- ♻️ Encourages reuse over disposal
+- 📱 Responsive, minimal UI
 
-## Build your app
+---
 
-Continue building your app on:
+## 🛠️ Tech Stack
 
-**[https://v0.app/chat/lMR0HPg4MCL](https://v0.app/chat/lMR0HPg4MCL)**
+### Frontend
+- React
+- Next.js
+- JavaScript
+- CSS / Tailwind CSS
 
-## How It Works
+### Backend
+- Node.js
+- Express.js
+- RESTful API design
+- JWT-based authentication
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### Database
+- MongoDB
+
+### Deployment
+- Frontend: Vercel
+- Backend: Cloud hosting (Render / Railway)
+
+---
+
+## 📂 Project Status
+- ✅ Frontend completed
+- 🛠️ Backend APIs implemented
+- ⏳ Authentication & database integration in progress
+
+---
+
+## 🧠 Core Use Cases
+- Students exchanging books, furniture, or electronics
+- Households giving away unused items
+- Small businesses reducing discard waste
+- Local communities promoting sustainability
+
+---
+
+## 🌱 Impact
+- Reduces landfill waste
+- Promotes a circular economy
+- Strengthens local communities
+- Makes sustainability accessible and simple
+
+---
+
+## 🔮 Future Enhancements
+- Real-time chat between users
+- Pickup scheduling
+- User reputation system
+- NGO & recycler partnerships
+- Impact analytics dashboard
+
+---
+
+## 👥 Team
+Built as part of a hackathon project by the Scrapp team.
+
+---
+
+## 📜 License
+Developed for educational and hackathon purposes.
