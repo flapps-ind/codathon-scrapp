@@ -10,7 +10,7 @@ It works like a **“Olx for Trash”** — users post items they are about to d
 ## 🌍 Theme
 **Build a Digital Solution for a Greener Planet**
 
-SecondLife supports this theme by:
+scrapp supports this theme by:
 - Preventing waste at the source
 - Encouraging reuse over disposal
 - Reducing landfill contribution
@@ -54,7 +54,7 @@ AI is integrated via backend APIs to:
 
 ### Frontend
 - Next.js (App Router)
-- v0‑generated UI
+- UI designed with Next.js
 - Fetch‑based API integration
 - Desktop‑first responsive design
 
