@@ -40,10 +40,16 @@ export function MarketplaceFeed({ searchQuery = "" }: MarketplaceFeedProps) {
   const handleClaim = async (id: string) => {
     setClaimingId(id)
     try {
-      await claimItem(id)
-      setItems((prev) => prev.map((item) => (item.id === id ? { ...item, claimed: true } : item)))
+      const item = items.find((i) => i.id === id)
+      const newClaimedState = !item?.claimed
+
+      if (newClaimedState) {
+        await claimItem(id)
+      }
+
+      setItems((prev) => prev.map((item) => (item.id === id ? { ...item, claimed: newClaimedState } : item)))
       if (selectedItem?.id === id) {
-        setSelectedItem((prev) => (prev ? { ...prev, claimed: true } : null))
+        setSelectedItem((prev) => (prev ? { ...prev, claimed: newClaimedState } : null))
       }
     } catch (error) {
       console.error("Failed to claim item:", error)
