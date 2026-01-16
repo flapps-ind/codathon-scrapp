@@ -207,3 +207,67 @@ export const categories = [
   { id: "books", name: "Books", icon: "BookOpen" },
   { id: "kids", name: "Kids", icon: "Baby" },
 ]
+
+export interface MyListing {
+  id: string
+  name: string
+  image: string
+  caption: string
+  co2_saved: number
+  expires_in_hours: number
+  claimed: boolean
+  contacted: boolean
+}
+
+export const mockMyListings: MyListing[] = [
+  {
+    id: "my-1",
+    name: "Old Bookshelf",
+    image: "/wooden-bookshelf-brown.jpg",
+    caption: "Tall wooden bookshelf with 5 shelves. Perfect for home office or living room.",
+    co2_saved: 25.3,
+    expires_in_hours: 72,
+    claimed: false,
+    contacted: false,
+  },
+  {
+    id: "my-2",
+    name: "Coffee Table",
+    image: "/glass-coffee-table-modern.jpg",
+    caption: "Glass-top coffee table with metal frame. Minor scratches underneath.",
+    co2_saved: 18.7,
+    expires_in_hours: 24,
+    claimed: true,
+    contacted: true,
+  },
+  {
+    id: "my-3",
+    name: "Desk Lamp",
+    image: "/desk-lamp-black-adjustable.jpg",
+    caption: "Adjustable LED desk lamp with USB charging port. Works perfectly.",
+    co2_saved: 4.2,
+    expires_in_hours: -12, // Expired
+    claimed: false,
+    contacted: false,
+  },
+  {
+    id: "my-4",
+    name: "Running Shoes",
+    image: "/nike-running-shoes-blue.jpg",
+    caption: "Nike running shoes size 10. Used but still in good condition.",
+    co2_saved: 8.9,
+    expires_in_hours: 48,
+    claimed: false,
+    contacted: true,
+  },
+  {
+    id: "my-5",
+    name: "Electric Kettle",
+    image: "/electric-kettle-stainless.jpg",
+    caption: "Stainless steel electric kettle 1.7L. Heats water quickly.",
+    co2_saved: 6.1,
+    expires_in_hours: 96,
+    claimed: false,
+    contacted: false,
+  },
+]

@@ -7,9 +7,15 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Leaf, Plus, LogOut, User, Search, X } from "lucide-react"
+import { Leaf, Plus, LogOut, User, Search, X, List } from "lucide-react"
 import { isAuthenticated, logout } from "@/lib/api"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"
 
 interface HeaderProps {
   onUploadClick?: () => void
@@ -95,6 +101,16 @@ export function Header({ onUploadClick, searchQuery = "", onSearchChange }: Head
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="bg-card border-border">
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/my-listings"
+                        className="flex items-center text-foreground focus:bg-secondary cursor-pointer"
+                      >
+                        <List className="w-4 h-4 mr-2" />
+                        My Listings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-border" />
                     <DropdownMenuItem
                       onClick={handleLogout}
                       className="text-foreground focus:bg-secondary cursor-pointer"
