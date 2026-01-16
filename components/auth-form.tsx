@@ -22,12 +22,32 @@ export function AuthForm({ mode }: AuthFormProps) {
     name: "",
     email: "",
     password: "",
+    mobile: "+91 ",
   })
+
+  const validateMobile = (mobile: string) => {
+    const digitsOnly = mobile.replace(/^\+91\s*/, "").replace(/\D/g, "")
+    return digitsOnly.length === 10
+  }
+
+  const handleMobileChange = (value: string) => {
+    // Ensure +91 prefix is always present
+    if (!value.startsWith("+91")) {
+      value = "+91 " + value.replace(/^\+91\s*/, "")
+    }
+    setFormData({ ...formData, mobile: value })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+
+    if (mode === "signup" && !validateMobile(formData.mobile)) {
+      setError("Please enter a valid 10-digit mobile number")
+      setIsLoading(false)
+      return
+    }
 
     try {
       if (mode === "signup") {
@@ -91,6 +111,26 @@ export function AuthForm({ mode }: AuthFormProps) {
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
             </div>
+
+            {mode === "signup" && (
+              <div className="space-y-2">
+                <Label htmlFor="mobile" className="text-foreground">
+                  Mobile Number
+                </Label>
+                <Input
+                  id="mobile"
+                  type="tel"
+                  placeholder="+91 9876543210"
+                  value={formData.mobile}
+                  onChange={(e) => handleMobileChange(e.target.value)}
+                  required
+                  className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Your number will be shared with the claimer after an item is claimed.
+                </p>
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground">

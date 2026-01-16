@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Clock, MapPin, Leaf } from "lucide-react"
+import { Clock, MapPin, Leaf, Phone, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import type { Item } from "@/lib/mock-data"
@@ -43,6 +43,7 @@ export function ItemCard({ item, onClaim, onSelect, isClaiming }: ItemCardProps)
           <Badge className={cn("text-xs font-medium", urgencyColors[item.urgency])}>
             {item.urgency === "high" ? "Urgent" : item.urgency === "medium" ? "Soon" : "Available"}
           </Badge>
+          {item.claimed && <Badge className="bg-primary text-primary-foreground text-xs font-medium">Claimed</Badge>}
         </div>
         <div className="absolute top-3 right-3">
           <Badge className="bg-primary/90 text-primary-foreground text-xs font-medium">
@@ -67,15 +68,34 @@ export function ItemCard({ item, onClaim, onSelect, isClaiming }: ItemCardProps)
           </div>
         </div>
 
+        {item.claimed && (
+          <div className="mt-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+            <div className="flex items-center gap-2 text-sm text-foreground">
+              <Phone className="w-4 h-4 text-primary" />
+              <span className="font-medium">{item.sellerName}</span>
+              <span className="text-primary">{item.sellerMobile}</span>
+            </div>
+            <div className="flex items-start gap-1.5 mt-2 text-xs text-muted-foreground">
+              <AlertCircle className="w-3 h-3 mt-0.5 shrink-0" />
+              <span>Contact the seller to arrange pickup. Be respectful and punctual.</span>
+            </div>
+          </div>
+        )}
+
         <Button
-          className="w-full mt-4 bg-primary text-primary-foreground hover:bg-primary/90"
-          disabled={item.claimed || isClaiming}
+          className={cn(
+            "w-full mt-4",
+            item.claimed
+              ? "bg-muted text-muted-foreground hover:bg-destructive/10 hover:text-destructive border border-border"
+              : "bg-primary text-primary-foreground hover:bg-primary/90",
+          )}
+          disabled={isClaiming}
           onClick={(e) => {
             e.stopPropagation()
             onClaim(item.id)
           }}
         >
-          {item.claimed ? "Claimed" : isClaiming ? "Claiming..." : "Claim Item"}
+          {isClaiming ? "Processing..." : item.claimed ? "Unclaim Item" : "Claim Item"}
         </Button>
       </div>
     </div>

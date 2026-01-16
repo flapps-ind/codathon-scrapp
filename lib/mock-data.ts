@@ -10,6 +10,8 @@ export interface Item {
   claimed: boolean
   category: string
   tags: string[]
+  sellerMobile: string
+  sellerName: string
 }
 
 export const mockItems: Item[] = [
@@ -25,6 +27,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "furniture",
     tags: ["chair", "wooden", "vintage", "oak", "seating", "retro", "office"],
+    sellerMobile: "+91 9876543210",
+    sellerName: "Rahul S.",
   },
   {
     id: "2",
@@ -38,6 +42,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "electronics",
     tags: ["microwave", "samsung", "kitchen", "appliance", "cooking", "heating"],
+    sellerMobile: "+91 9123456789",
+    sellerName: "Priya M.",
   },
   {
     id: "3",
@@ -51,6 +57,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "sports",
     tags: ["bicycle", "bike", "kids", "children", "outdoor", "riding", "blue"],
+    sellerMobile: "+91 8765432109",
+    sellerName: "Amit K.",
   },
   {
     id: "4",
@@ -64,6 +72,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "garden",
     tags: ["hose", "garden", "watering", "outdoor", "yard", "green", "nozzle"],
+    sellerMobile: "+91 7654321098",
+    sellerName: "Sunita P.",
   },
   {
     id: "5",
@@ -77,6 +87,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "books",
     tags: ["books", "reading", "fiction", "non-fiction", "literature", "collection"],
+    sellerMobile: "+91 6543210987",
+    sellerName: "Vikram R.",
   },
   {
     id: "6",
@@ -90,6 +102,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "furniture",
     tags: ["desk", "office", "l-shaped", "workspace", "work from home", "table"],
+    sellerMobile: "+91 5432109876",
+    sellerName: "Neha D.",
   },
   {
     id: "7",
@@ -103,6 +117,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "clothing",
     tags: ["jacket", "winter", "north face", "warm", "waterproof", "coat", "medium"],
+    sellerMobile: "+91 4321098765",
+    sellerName: "Arjun G.",
   },
   {
     id: "8",
@@ -116,6 +132,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "garden",
     tags: ["pots", "plant", "ceramic", "indoor", "gardening", "planter", "terracotta"],
+    sellerMobile: "+91 3210987654",
+    sellerName: "Kavita L.",
   },
   {
     id: "9",
@@ -129,6 +147,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "kids",
     tags: ["stroller", "baby", "graco", "pram", "foldable", "pushchair", "infant"],
+    sellerMobile: "+91 2109876543",
+    sellerName: "Deepa N.",
   },
   {
     id: "10",
@@ -142,6 +162,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "electronics",
     tags: ["fan", "standing", "oscillating", "cooling", "summer", "electric"],
+    sellerMobile: "+91 1098765432",
+    sellerName: "Ravi T.",
   },
   {
     id: "11",
@@ -155,6 +177,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "sports",
     tags: ["yoga", "mat", "exercise", "fitness", "workout", "purple", "pilates"],
+    sellerMobile: "+91 9988776655",
+    sellerName: "Meera B.",
   },
   {
     id: "12",
@@ -168,6 +192,8 @@ export const mockItems: Item[] = [
     claimed: false,
     category: "furniture",
     tags: ["table", "kitchen", "dining", "wooden", "seats 4", "wood"],
+    sellerMobile: "+91 8877665544",
+    sellerName: "Sanjay V.",
   },
 ]
 
