@@ -1,14 +1,13 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Leaf, Loader2 } from "lucide-react"
-import { loginUser, signupUser } from "@/lib/api"
+import { createClient } from "@/lib/supabase/client"
 
 interface AuthFormProps {
   mode: "login" | "signup"
@@ -18,6 +17,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,13 +25,21 @@ export function AuthForm({ mode }: AuthFormProps) {
     mobile: "+91 ",
   })
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const validatePassword = (password: string) => {
+    return password.length >= 6
+  }
+
   const validateMobile = (mobile: string) => {
     const digitsOnly = mobile.replace(/^\+91\s*/, "").replace(/\D/g, "")
     return digitsOnly.length === 10
   }
 
   const handleMobileChange = (value: string) => {
-    // Ensure +91 prefix is always present
     if (!value.startsWith("+91")) {
       value = "+91 " + value.replace(/^\+91\s*/, "")
     }
@@ -42,6 +50,19 @@ export function AuthForm({ mode }: AuthFormProps) {
     e.preventDefault()
     setIsLoading(true)
     setError("")
+    setSuccess("")
+
+    if (!validateEmail(formData.email)) {
+      setError("Please enter a valid email address")
+      setIsLoading(false)
+      return
+    }
+
+    if (!validatePassword(formData.password)) {
+      setError("Password must be at least 6 characters")
+      setIsLoading(false)
+      return
+    }
 
     if (mode === "signup" && !validateMobile(formData.mobile)) {
       setError("Please enter a valid 10-digit mobile number")
@@ -49,15 +70,67 @@ export function AuthForm({ mode }: AuthFormProps) {
       return
     }
 
+    if (mode === "signup" && !formData.name.trim()) {
+      setError("Name is required")
+      setIsLoading(false)
+      return
+    }
+
+    const supabase = createClient()
+
     try {
       if (mode === "signup") {
-        await signupUser(formData.name, formData.email, formData.password)
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || window.location.origin,
+            data: {
+              name: formData.name.trim(),
+              mobile: formData.mobile,
+            },
+          },
+        })
+
+        if (signUpError) {
+          if (signUpError.message.includes("already registered")) {
+            setError("An account with this email already exists")
+          } else {
+            setError(signUpError.message)
+          }
+          return
+        }
+
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+          setSuccess("Check your email to confirm your account before signing in.")
+        } else if (data.session) {
+          router.push("/")
+          router.refresh()
+        }
       } else {
-        await loginUser(formData.email, formData.password)
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (signInError) {
+          if (signInError.message.includes("Invalid login credentials")) {
+            // Check if user exists by trying to get user
+            setError("Invalid email or password. Please check your credentials.")
+          } else if (signInError.message.includes("Email not confirmed")) {
+            setError("Please confirm your email before signing in.")
+          } else {
+            setError(signInError.message)
+          }
+          return
+        }
+
+        router.push("/")
+        router.refresh()
       }
-      router.push("/")
-    } catch {
-      setError(mode === "login" ? "Invalid credentials" : "Signup failed")
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -83,7 +156,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             {mode === "signup" && (
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-foreground">
-                  Name
+                  Name <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
@@ -92,6 +165,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
+                  disabled={isLoading}
                   className="bg-input border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
@@ -99,7 +173,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground">
-                Email
+                Email <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="email"
@@ -108,6 +182,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
+                disabled={isLoading}
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
             </div>
@@ -115,7 +190,7 @@ export function AuthForm({ mode }: AuthFormProps) {
             {mode === "signup" && (
               <div className="space-y-2">
                 <Label htmlFor="mobile" className="text-foreground">
-                  Mobile Number
+                  Mobile Number <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="mobile"
@@ -124,6 +199,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                   value={formData.mobile}
                   onChange={(e) => handleMobileChange(e.target.value)}
                   required
+                  disabled={isLoading}
                   className="bg-input border-border text-foreground placeholder:text-muted-foreground"
                 />
                 <p className="text-xs text-muted-foreground">
@@ -134,7 +210,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground">
-                Password
+                Password <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="password"
@@ -143,11 +219,24 @@ export function AuthForm({ mode }: AuthFormProps) {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
+                disabled={isLoading}
+                minLength={6}
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
+              {mode === "signup" && <p className="text-xs text-muted-foreground">Must be at least 6 characters</p>}
             </div>
 
-            {error && <p className="text-destructive text-sm">{error}</p>}
+            {error && (
+              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                <p className="text-destructive text-sm">{error}</p>
+              </div>
+            )}
+
+            {success && (
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20">
+                <p className="text-primary text-sm">{success}</p>
+              </div>
+            )}
 
             <Button
               type="submit"

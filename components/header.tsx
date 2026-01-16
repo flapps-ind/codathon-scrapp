@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Leaf, Plus, LogOut, User, Search, X, List } from "lucide-react"
-import { isAuthenticated, logout } from "@/lib/api"
+import { createClient } from "@/lib/supabase/client"
+import type { User as SupabaseUser } from "@supabase/supabase-js"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,20 +26,35 @@ interface HeaderProps {
 
 export function Header({ onUploadClick, searchQuery = "", onSearchChange }: HeaderProps) {
   const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState<SupabaseUser | null>(null)
   const [localSearch, setLocalSearch] = useState(searchQuery)
+  const supabase = createClient()
 
   useEffect(() => {
-    setIsLoggedIn(isAuthenticated())
-  }, [])
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase.auth])
 
   useEffect(() => {
     setLocalSearch(searchQuery)
   }, [searchQuery])
 
-  const handleLogout = () => {
-    logout()
-    setIsLoggedIn(false)
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setUser(null)
     router.push("/login")
   }
 
@@ -51,6 +67,8 @@ export function Header({ onUploadClick, searchQuery = "", onSearchChange }: Head
     setLocalSearch("")
     onSearchChange?.("")
   }
+
+  const isLoggedIn = !!user
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
